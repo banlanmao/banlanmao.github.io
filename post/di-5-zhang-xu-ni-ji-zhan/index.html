@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://banlanmao.github.io/favicon.ico?v=1620954702667">
+<link rel="shortcut icon" href="https://banlanmao.github.io/favicon.ico?v=1621589270115">
 <link rel="stylesheet" href="https://banlanmao.github.io/styles/main.css">
 
 
@@ -24,7 +24,7 @@
 虚拟机栈出现的背景
 由于跨平台性的设计，Java的指令都是根据栈来设计的，不同平台CPU架构不同，所以不能设计为基于寄存器的
 优点是跨平台，指令集小，编译器容易实现，缺点是性能下降，实现同样的功能需要更多的指令..." />
-    <meta name="keywords" content="" />
+    <meta name="keywords" content="JVM" />
   </head>
   <body>
     <div id="app" class="main">
@@ -33,7 +33,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://banlanmao.github.io">
-        <img src="https://banlanmao.github.io/images/avatar.png?v=1620954702667" class="site-logo">
+        <img src="https://banlanmao.github.io/images/avatar.png?v=1621589270115" class="site-logo">
         <h1 class="site-title">banlanmao</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -208,13 +208,45 @@
 <li>如果当前方法调用了其他方法，方法返回之际，当前栈帧会传回此方法的执行结果给前一个栈帧，接着，虚拟机会丢弃当前栈帧，使得前一个栈帧重新成为当前栈帧</li>
 <li>Java方法有两种返回函数的方式，一种是正常的函数返回，使用return指令；另外一种是抛出异常，不管是用哪种方式，都会导致栈帧被弹出</li>
 </ul>
-<ol start="3">
-<li></li>
-</ol>
 <h2 id="47-栈桢的内部结构">47-栈桢的内部结构</h2>
+<p>每个栈帧中存储着：</p>
+<ul>
+<li>局部变量表（Local Variables）</li>
+<li>操作数栈（Operand Stack）（或表达式栈）</li>
+<li>动态链接（Dynamic Linking）（或指向运行时常量池的方法引用）</li>
+<li>方法返回地址（Return Address）（或方法正常退出或者异常退出的定义）</li>
+<li>一些附加信息</li>
+</ul>
 <h2 id="48-局部变量表结构的认识">48-局部变量表结构的认识</h2>
+<ul>
+<li>局部变量表也被称之为局部变量数组或本地变量表</li>
+<li>定义为一个数字数组，主要用于存储方法参数和定义在方法体内的局部变量，这些数据类型包括各类基本数据类型、对象引用（reference），以及returnAddress类型</li>
+<li>由于局部变量表是建立在线程的栈上，是线程的私有数据，因此不存在数据安全问题</li>
+<li>局部变量表所需的容量大小是在编译器确定下来的，并保存在方法的code属性的 maximum local variables 数据项中，在方法运行期间是不会改变局部变量表的大小的。</li>
+<li>方法嵌套调用的次数由栈的大小决定，一般来说，栈越大，方法嵌套调用次数越多。对一个函数而言，它的参数和局部变量越多，使得局部变量表膨胀，它的栈帧就越大，以满足方法调用所需传递的信息增大的需求。进而函数调用就会占用更多的栈空间，导致其嵌套调用次数就会减少。</li>
+<li>局部变量表中的变量只在当前方法调用中有效，在方法执行时，虚拟机通过使用局部变量表完成数值到参数变量列表的传递过程，当方法调用结束后，随着方法栈帧的销毁，局部变量表也会随之销毁。</li>
+</ul>
 <h2 id="49-字节码中方法内部结构的剖析">49-字节码中方法内部结构的剖析</h2>
 <h2 id="50-变量槽slot的理解与演示">50-变量槽slot的理解与演示</h2>
+<ul>
+<li>参数值的存放总是在局部变量数组的index0开始，到数组长度-1的索引结束</li>
+<li>局部变量表，最基本的存储单元是slot（变量槽）</li>
+<li>局部变量表中存放编译器可知的各种基本数据类型（8种），引用类型（reference），returnAddress类型的变量</li>
+<li>在局部变量表里，32位以内的类型只占用一个slot（包括returnAddress类型），64位的类型（long和double）占用两个slot
+<ul>
+<li>byte、short、char 在存储前被转换为 int，boolean 也被转换为 int，0 表示false，非0 表示true</li>
+<li>long 和 double 则占据两个slot</li>
+</ul>
+</li>
+<li>JVM会为局部变量表中的每一个Slot都分配要给访问索引，通过这个索引即可成功访问到局部变量表中指定的局部变量值</li>
+<li>当一个实例方法被调用的时候，它的方法参数和方法体内部定义的局部变量将会按照顺序被复制到局部变量表中的每一个Slot上</li>
+<li>如果需要访问局部变量表中一个64bit的局部变量值时，只需要使用前一个索引即可。（比如：访问long或double类型变量）</li>
+<li>如果当前帧是由构造方法或者实例方法创建的，那么该对象引用this将会存放在index为0的slot处，其余的参数按照参数表顺序继续排列。</li>
+</ul>
+<p>Slot的重复利用</p>
+<ul>
+<li>栈帧中的局部变量表中的槽位是可以重用的，如果一个局部变量过了其作用域，那么在其作用域之后申明的新的局部变量就很有可能会复用过期局部变量的槽位，从而达到节省资源的目的</li>
+</ul>
 <h2 id="51-静态变量与局部变量的对比及小结">51-静态变量与局部变量的对比及小结</h2>
 <h2 id="52-操作数栈的特点">52-操作数栈的特点</h2>
 <h2 id="53-涉及操作数栈的字节码指令执行分析">53-涉及操作数栈的字节码指令执行分析</h2>
@@ -229,6 +261,14 @@
 <h2 id="62-虚拟机栈的5道面试题">62-虚拟机栈的5道面试题</h2>
 
             </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://banlanmao.github.io/tag/F8-HJX5Nr/" class="tag">
+                    JVM
+                  </a>
+                
+              </div>
             
             
               <div class="next-post">
