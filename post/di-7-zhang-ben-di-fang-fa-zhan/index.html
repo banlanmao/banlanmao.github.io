@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>关于 | banlanmao</title>
+<title>第7章 本地方法栈 | banlanmao</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,10 +18,14 @@
 
 
 
-    <meta name="description" content="文章根据标签分类
-查看系列文章，点击标签就可以
-" />
-    <meta name="keywords" content="" />
+    <meta name="description" content="64-本地方法栈的理解
+
+Java虚拟机栈用于管理Java方法的调用，而本地方法栈用于管理本地方法的调用。
+本地方法栈，也是线程私有的。
+允许被实现成固定或者是可动态扩展的内存大小，（在内存溢出方面是相同的）
+
+如果线程请求分配的栈容量超过..." />
+    <meta name="keywords" content="JVM" />
   </head>
   <body>
     <div id="app" class="main">
@@ -96,15 +100,52 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">关于</h2>
-            <div class="post-date">2021-04-29 11:18:53</div>
+            <h2 class="post-title">第7章 本地方法栈</h2>
+            <div class="post-date">2021-05-27 09:18:41</div>
             
             <div class="post-content" v-pre>
-              <h3 id="文章根据标签分类">文章根据标签分类</h3>
-<p>查看系列文章，点击标签就可以</p>
+              <h2 id="64-本地方法栈的理解">64-本地方法栈的理解</h2>
+<ul>
+<li>Java虚拟机栈用于管理Java方法的调用，而本地方法栈用于管理本地方法的调用。</li>
+<li>本地方法栈，也是线程私有的。</li>
+<li>允许被实现成固定或者是可动态扩展的内存大小，（在内存溢出方面是相同的）
+<ul>
+<li>如果线程请求分配的栈容量超过本地方法栈允许的最大容量，Java虚拟机将会抛出一个 StackOverflowError 异常</li>
+<li>如果本地方法栈可以动态扩展，并且在尝试扩展的时候无法申请到足够的内存，或者在创建新的线程时没有足够的内存去创建对应的本地方法栈，那么Java虚拟机将会抛出一个 OutOfMemoryError 异常。</li>
+</ul>
+</li>
+<li>本地方法是使用C语言实现的。</li>
+<li>它的具体做法是 Native Method Stack 中登记 native 方法，在 Execution Engine 执行时加载本地方法库。</li>
+<li>当某个线程调用一个本地方法时，它就进入了一个全新的并且不再受虚拟机限制的世界。它和虚拟机拥有同样的权限。
+<ul>
+<li>本地方法可以通过本地方法接口来访问虚拟机内部的运行时数据区。</li>
+<li>它甚至可以直接使用本地处理器中的寄存器</li>
+<li>直接从本地内存的堆中分配任意数量的内存。</li>
+</ul>
+</li>
+<li>并不是所有的JVM都支持本地方法。因为Java虚拟机规范并没有明确要求本地方法栈的使用语言、具体实现方式、数据结构等。如果JVM产品不打算支持native方法，也可以无需实现本地方法栈。</li>
+<li>在HotSpot JVM中，直接将本地方法和虚拟机栈合二为一。</li>
+</ul>
 
             </div>
             
+              <div class="tag-container">
+                
+                  <a href="https://banlanmao.github.io/tag/F8-HJX5Nr/" class="tag">
+                    JVM
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://banlanmao.github.io/post/di-6-zhang-ben-di-fang-fa-jie-kou/">
+                  <h3 class="post-title">
+                    第6章 本地方法接口
+                  </h3>
+                </a>
+              </div>
             
 
             
