@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>第18章 Class文件结构 | banlanmao</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://banlanmao.github.io/favicon.ico?v=1634625401366">
+<link rel="stylesheet" href="https://banlanmao.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="01-JVM中篇内容概述
+02-字节码文件的跨平台性
+
+Java语言: 跨平台的语言(write once ,run anywhere)。
+
+当Java源代码成功编译成字节码后, 如果想在不同的平台上面运行, 则无须再次编译
+这个优势不再那..." />
+    <meta name="keywords" content="JVM" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://banlanmao.github.io">
+        <img src="https://banlanmao.github.io/images/avatar.png?v=1634625401366" class="site-logo">
+        <h1 class="site-title">banlanmao</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/banlanmao/" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      不写下来，怎么知道自己到底学的是什么
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/banlanmao/" target="_blank">banlanmao</a> | <a class="rss" href="https://banlanmao.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">第18章 Class文件结构</h2>
+            <div class="post-date">2021-07-09 15:30:36</div>
+            
+            <div class="post-content" v-pre>
+              <h2 id="01-jvm中篇内容概述">01-JVM中篇内容概述</h2>
+<h2 id="02-字节码文件的跨平台性">02-字节码文件的跨平台性</h2>
+<ol>
+<li>Java语言: 跨平台的语言(write once ,run anywhere)。
+<ul>
+<li>当Java源代码成功编译成字节码后, 如果想在不同的平台上面运行, 则无须再次编译</li>
+<li>这个优势不再那么吸引人了。Python、PHP、Perl、Ruby、Lisp等有强大的解释器</li>
+<li>跨平台似乎已经快成为一门语言必选的特性。</li>
+</ul>
+</li>
+<li>Java 虚拟机： 跨语言的平台
+<ul>
+<li>Java虚拟机不和包括 Java 在内的任何语言绑定, 它只有 &quot;Class 文件&quot; 这种特定的二进制文件格式所关联, 无论使用何种语言进行软件开发, 只要能将源文件编译为正确的Class文件, 那么这种语言就可以在 Java 虚拟机上执行,可以说。统一而强大的Class文件结构, 就是 Java 虚拟机的基石、桥梁.</li>
+</ul>
+</li>
+</ol>
+<p>https://docs.oracle.com/javase/specs/index.html</p>
+<pre><code>- 所有的JVM全部遵守Java虚拟机规范, 也就是说所有的JVM环境都是一样的, 这样一来字节码文件可以在各种JVM上运行.
+</code></pre>
+<ol start="3">
+<li>想要让一个Java程序正确地运行在JVM中, Java源码就必须要被编译为符合JVM规范的字节码.
+<ul>
+<li>前端编译器的主要任务就是负责将符合Java语法规范的Java代码转换为符合JVM规范的字节码文件。</li>
+<li>javac 是一种能够将Java源码编译为字节码的前端编译器.</li>
+<li>Javac编译器在将Java源码编译为一个有效的字节码文件过程中经历了4个步骤,分别是词法解析、语法解析、语义解析以及生成字节码。</li>
+</ul>
+</li>
+</ol>
+<p>Oracle的JDK软件包括两部分内容:<br>
+- 一部分是将 Java 源代码编译成 Java 虚拟机的指令集的编译器。<br>
+- 另一部分是用于实现 Java 虚拟机的运行时环境。</p>
+<h2 id="03-了解java的前端编译器">03-了解Java的前端编译器</h2>
+<p>前端编译器vs后端编译器<br>
+Java源代码的编译结果是字节码,那么肯定需要有一种编译器能够将Java源码编译为字节码。承担这个重要责任的就是配置在path环境变量中的javac编译器。javac是一种能够将java源码编译为字节码的前端编译器。<br>
+HotSpot VM 并没有强制要求前端编译器只能使用javac来编译字节码, 其实只要编译结果符合JVM规范都可以被JVM所识别即可。<br>
+在Java的前端编译器领域,除了javac之外,还有一种被大家经常用到的前端编译器,那就是内置在Eclipse中的ECJ (Eclipse Compiler for Java)编译器。和Javac的全量式编译不同, ECJ是一种增量式编译器。</p>
+<ul>
+<li>在Eclipse中, 当开发人员编写完代码后, 使用&quot;ctrl+s&quot;快捷键时, ECJ编译器所采取的编译方案是把未编译部分的源码逐行进行编译, 而非每次都全量编译, 因此ECJ的编译效率会比Javac更加迅速和高效,当然编译质量和Javac相比大致还是一样的.</li>
+<li>ECJ 不仅是Eclipse的默认内置前端编译器, 在Tomcat中同样也是使用 ECJ 编译器来编译 jsp 文件, 由于ECJ编译器是采用GPLv2的开源协议进行源代码公开,所以,大家可以登录Eclipse官网下载ECJ编译器的源码进行二次开发.</li>
+<li>默认情况下, IntelliJ IDEA使用javac编译器.(还可以自己设置为AspectJ编译器 ajc)</li>
+</ul>
+<p>前端编译器并不会直接涉及编译优化等方面的技术,再是将这些具体优化细节移交给HotSpot的JIT编译器负责.<br>
+复习, ADT (静态提前编译器. Ahead of Time Compiler)</p>
+<h2 id="04-透过字节码看代码执行细节举例1">04-透过字节码看代码执行细节举例1</h2>
+<p>BAT面试题</p>
+<ol>
+<li>类文件结构有几个部分？</li>
+<li>知道字节码吗？字节码都有哪些？Integer x = 5; int y = 5; 比较 x == y 都经过哪些步骤？</li>
+</ol>
+<p>Integer.valueOf(int i)<br>
+IntegerCache</p>
+<h2 id="05-透过字节码看代码执行细节举例2">05-透过字节码看代码执行细节举例2</h2>
+<h2 id="06-透过字节码看代码执行细节举例3">06-透过字节码看代码执行细节举例3</h2>
+<h2 id="07-解读class文件的三种方式">07-解读Class文件的三种方式</h2>
+<ul>
+<li>字节码文件里是什么?<br>
+源代码经过编译器编译之后便会生成一个字节码文件, 字节码是一种二进制的类文件, 它的内容是JVM的指令, 而不像C、C++经由编译器直接生成机器码。</li>
+<li>什么是字节码指令(byte code) ?<br>
+Java虚拟机的指令由一个字节长度的、代表着某种特定操作含义的操作码(opcode)以及跟随其后的零至多个代表此操作所需参数的操作数(operand)所构成, 虚拟机中许多指令并不包含操作数, 只有一个操作码。<br>
+比如：</li>
+</ul>
+<p>如何解读供虚拟机解释执行的二进制字节码？<br>
+方式一：一个一个二进制的看，这里用到的是Notepad++，需要安装一个HEX-Editor插件，或者使用Binary Viewer<br>
+方式二：使用javap指令，jdk自带的反解析工具<br>
+方式三：使用IDEA插件，jclasslib 或jclasslib bytecode viewer 客户端工具。（可视化更好）</p>
+<h2 id="08-class文件本质和内部数据类型">08-Class文件本质和内部数据类型</h2>
+<h2 id="09-class文件内部结构概述">09-Class文件内部结构概述</h2>
+<h2 id="10-字节码数据保存到excel中的操作">10-字节码数据保存到excel中的操作</h2>
+<h2 id="11-class文件的标识魔数">11-Class文件的标识：魔数</h2>
+<h2 id="12-class文件版本号">12-Class文件版本号</h2>
+<h2 id="13-常量池概述">13-常量池概述</h2>
+<h2 id="14-常量池计数器">14-常量池计数器</h2>
+<h2 id="15-常量池表中的字面量和符号引用">15-常量池表中的字面量和符号引用</h2>
+<h2 id="16-解析得到常量池中所有的常量">16-解析得到常量池中所有的常量</h2>
+<h2 id="17-常量池表数据的解读1">17-常量池表数据的解读1</h2>
+<h2 id="18-常量池表数据的解读2">18-常量池表数据的解读2</h2>
+<h2 id="19-常量池表项数据的总结">19-常量池表项数据的总结</h2>
+<h2 id="20-访问标识">20-访问标识</h2>
+<h2 id="21-类索引-父类索引-接口索引集合">21-类索引、父类索引、接口索引集合</h2>
+<h2 id="22-字段表集合的整体理解">22-字段表集合的整体理解</h2>
+<h2 id="23-字段表数据的解读">23-字段表数据的解读</h2>
+<h2 id="24-方法表集合的整体理解">24-方法表集合的整体理解</h2>
+<h2 id="25-方法表数据的解读">25-方法表数据的解读</h2>
+<h2 id="26-属性表集合的整理理解">26-属性表集合的整理理解</h2>
+<h2 id="27-方法中code属性的解读">27-方法中Code属性的解读</h2>
+<h2 id="28-linenumbertable和localvariabletable属性的解读">28-LineNumberTable和LocalVariableTable属性的解读</h2>
+<h2 id="29-sourcefile属性的解读">29-SourceFile属性的解读</h2>
+<h2 id="30-class文件结构的小结">30-Class文件结构的小结</h2>
+<h2 id="31-javac-g操作的说明">31-javac -g操作的说明</h2>
+<h2 id="32-javap主要参数的使用">32-javap主要参数的使用</h2>
+<h2 id="33-javap解析得到的文件结构的解读">33-javap解析得到的文件结构的解读</h2>
+<h2 id="34-javap使用小结">34-javap使用小结</h2>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://banlanmao.github.io/tag/F8-HJX5Nr/" class="tag">
+                    JVM
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://banlanmao.github.io/post/di-17-zhang-la-ji-hui-shou-qi/">
+                  <h3 class="post-title">
+                    第17章 垃圾回收器
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

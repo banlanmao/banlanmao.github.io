@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>第13章 StringTable | banlanmao</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://banlanmao.github.io/favicon.ico?v=1634625401366">
+<link rel="stylesheet" href="https://banlanmao.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="118-String的不可变性
+
+String：字符串，使用一对 &quot;&quot; 引起来表示
+
+String s1 = &quot;aaa&quot;;//字面量的定义方式
+String s2 = new String(&quot..." />
+    <meta name="keywords" content="JVM" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://banlanmao.github.io">
+        <img src="https://banlanmao.github.io/images/avatar.png?v=1634625401366" class="site-logo">
+        <h1 class="site-title">banlanmao</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/banlanmao/" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      不写下来，怎么知道自己到底学的是什么
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/banlanmao/" target="_blank">banlanmao</a> | <a class="rss" href="https://banlanmao.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">第13章 StringTable</h2>
+            <div class="post-date">2021-06-08 15:36:48</div>
+            
+            <div class="post-content" v-pre>
+              <h2 id="118-string的不可变性">118-String的不可变性</h2>
+<ul>
+<li>String：字符串，使用一对 &quot;&quot; 引起来表示
+<ul>
+<li>String s1 = &quot;aaa&quot;;//字面量的定义方式</li>
+<li>String s2 = new String(&quot;hello&quot;);</li>
+</ul>
+</li>
+<li>String声明为final的，不可被继承</li>
+<li>String实现了Serializable接口：表示字符串是支持序列化的；实现了Comparable接口：表示String可以比较大小</li>
+<li>String在JDK8及以前内部定义了 final char[] value 用于存储字符串数据，JDK9改为 byte[]</li>
+<li>String：代表不可变的字符序列。简称：不可变性
+<ul>
+<li>当对字符串重新赋值时，需要重写指定内存区域赋值，不能使用原有的value进行赋值</li>
+<li>当对现有的字符串进行连接操作时，也需要重新指定内存区域赋值，不能使用原有的value进行赋值</li>
+<li>当调用String的replace()方法修改指定字符或字符串时，也需要重新指定内存区域赋值，不能使用原有的value进行赋值</li>
+</ul>
+</li>
+<li>通过字面量的方式（区别于new）给一个字符串赋值，此时的字符串值声明在字符串常量池中</li>
+</ul>
+<h2 id="119-string底层hashtable结构的说明">119-String底层Hashtable结构的说明</h2>
+<ul>
+<li>字符串常量池中是不会存储相同内容的字符串的</li>
+<li>String的String Pool是一个固定大小的Hashtable，默认值大小长度是1009。如果放进String Pool的String 非常多，就会造成Hash冲突严重，从而导致链表会很长，而链表长了后直接造成的映像就是当调用String.intern时性能会大幅下降</li>
+<li>使用<code>-XX:StringTableSize</code>可设置StringTable的长度</li>
+<li>在jdk6中StringTable是固定的，就是1009的长度，所以如果常量池中的字符串过多就会导致效率下降很快，StringTableSize设置没有要求</li>
+<li>在JDK7中，StringTable的长度默认值是60013，1009是可设置的最小值</li>
+<li>JDK8开始，设置StringTable的长度的话，1009是可设置的最小值</li>
+</ul>
+<h2 id="120-string内存结构的分配位置">120-String内存结构的分配位置</h2>
+<ul>
+<li>在Java语言中有8种基本数据类型和一种比较特殊的类型String。这些类型为了使它们在运行过程中速度更快、更节省内存，都提供了一种常量池的概念</li>
+<li>常量池就类似一个Java系统级别提供的缓存。8种基本数据类型的常量池都是系统协调的，String类型的常量池比较特殊。它的主要使用方法有两种。
+<ul>
+<li>直接使用双引号声明出来的String对象会直接存储在常量池中
+<ul>
+<li>比如：String info = &quot;aaa&quot;;</li>
+</ul>
+</li>
+<li>如果不是用双引号声明的String对象，可以使用String提供的intern()方法，这个后面重点谈</li>
+</ul>
+</li>
+<li>Java 6及以前，字符串常量池存放在永久代</li>
+<li>Java 7中Oracle的工程师对字符串池的逻辑做了很大的改变，即将字符串常量池的位置调整到Java堆内
+<ul>
+<li>所有的字符串都保存在堆（Heap）中，和其他普通对象一样，这样可以让你在进行调优应用时仅需要调整堆大小就可以了</li>
+<li>字符串常量池概念原本使用得比较多，但是这个改动使得我们有足够得理由让我们重新考虑在Java7中使用String.intern()</li>
+</ul>
+</li>
+<li>Java8元空间，字符串常量在堆</li>
+</ul>
+<p>StringTable为什么要调整？</p>
+<ol>
+<li>permSize默认比较小</li>
+<li>永久代垃圾回收频率低</li>
+</ol>
+<h2 id="121-两个案例熟悉string的基本操作">121-两个案例熟悉String的基本操作</h2>
+<p>Java语言规范要求完全相同得字符串字面量，应该包含同样得Unicode字符序列（包含同一份码点序列的常量），并且必须是指向同一个String类实例</p>
+<h2 id="122-字符串拼接操作的面试题讲解">122-字符串拼接操作的面试题讲解</h2>
+<p>字符串拼接操作</p>
+<ol>
+<li>常量与常量的拼接结果在常量池，原理是编译期优化</li>
+<li>常量池中不会存在相同内容的常量</li>
+<li>只要其中有一个是变量，结果就在堆中，变量拼接的原理是StringBuilder</li>
+<li>如果拼接的结果调用intern()方法，则主动将常量池中还没有的字符串对象放入池中，并返回此对象地址</li>
+</ol>
+<p>intern()：判断字符串常量池中是否存在javaEEhadoop值，如果存在，则返回常量池中javaEEhadoop的地址；如果字符串常量池中不存在javaEEhadoop，则在常量池中加载一份javaEEhadoop，并返回对象的地址</p>
+<h2 id="123-字符串变量拼接操作的底层原理">123-字符串变量拼接操作的底层原理</h2>
+<pre><code>String s1 = &quot;a&quot;;
+String s2 = &quot;b&quot;;
+String s3 = &quot;ab&quot;;
+如下 `s1+s2` 的执行细节：
+StringBuilder s = new StringBuilder();
+s.append(&quot;a&quot;);
+s.append(&quot;b&quot;);
+s.toString();//约等于 new String(&quot;ab&quot;);
+</code></pre>
+<p>在JDK1.5之后使用的是StringBuilder，在JDK5.0之前使用的是StringBuffer</p>
+<ol>
+<li>字符串拼接操作不一定使用的是StringBuilder；如果拼接符号左右两边都是字符串常量或常量引用，则仍然使用编译期优化，即非StringBuilder的方式</li>
+<li>针对于final修饰类、方法、基本数据类型、引用数据类型的变量的结构时，能使用上final的时候建议使用上</li>
+</ol>
+<h2 id="124-拼接操作与append操作的效率对比">124-拼接操作与append操作的效率对比</h2>
+<p>体会执行效率：通过StringBuilder的append()的方式添加字符串的效率要远高于使用String的字符串拼接方式；<br>
+详情：</p>
+<ol>
+<li>StringBuilder的append()的方式：自始至终只创建过一个StringBuilder的对象；使用String的字符串拼接方式：创建过多个StringBuilder和String的对象</li>
+<li>使用String的字符串拼接方式：内存中由于创建了较多StringBuilder和String的对象，内存占用更大，如果进行GC，需要花费额外的时间</li>
+</ol>
+<p>改进的空间：在实际开发中，如果基本确定要前前后后添加的字符串长度不高于某个限定值 highlevel 的情况下，建议使用构造器：StringBuilder s = new StringBuilder(highlevel);//new char[highlevel]</p>
+<h2 id="125-intern的理解">125-intern()的理解</h2>
+<p>如果不是用双引号声明的String对象，可以使用String提供的intern方法：intern方法会从字符串常量池中查询当前字符串是否存在，若不存在就会将当前字符串放入常量池中</p>
+<ul>
+<li>比如：String myInfo = new String(&quot;I love atguigu&quot;).intern();</li>
+</ul>
+<p>也就是说，如果在任意字符串上调用String.intern方法，那么其返回结果所指向的那个类实例，必须和直接以常量形式出现的字符串实例完全相同，因此，下列表达式的值必定是true;<br>
+(&quot;a&quot; + &quot;b&quot; + &quot;c&quot;).intern() == &quot;abc&quot;;</p>
+<p>通俗点讲，Interned String就是确保字符串在内存里只有一份拷贝，这样可以节约内存空间，加快字符串操作任务的执行速度，注意，这个值会被存放在字符串内部池(String Intern Pool)</p>
+<p>如何保证变量s指向的是字符串常量池中的数据呢？<br>
+有两种方式：<br>
+方式一：String s = &quot;aaa&quot;;//字面量定义的方式<br>
+方式二：调用intern方法<br>
+String s = new String(&quot;aaa&quot;).intern();String s = new StringBuilder(&quot;aaa&quot;).toString().intern();</p>
+<h2 id="126-new-string到底创建了几个对象">126-new String()到底创建了几个对象</h2>
+<p>new String(&quot;ab&quot;)会创建几个对象？看字节码，就知道是两个。<br>
+一个对象是：new关键字在堆空间创建的；<br>
+另一个对象是：字符串常量池中的对象。字节码指令：Ldc</p>
+<p>new String(&quot;a&quot;) + new String(&quot;b&quot;)会创建几个对象？<br>
+对象1：new StringBuilder()<br>
+对象2：new String(&quot;a&quot;)<br>
+对象3：常量池中的 &quot;a&quot;<br>
+对象4：new String(&quot;b&quot;)<br>
+对象5：常量池中的 &quot;b&quot;<br>
+深入刨析：StringBuilder的toString();<br>
+对象6：new String(&quot;ab&quot;)<br>
+强调一下，toString()的调用，在字符串常量池中，没有生成&quot;ab&quot;</p>
+<h2 id="127-关于intern的面试难题">127-关于intern()的面试难题</h2>
+<p>String s3 = new String(&quot;1&quot;)+new String(&quot;1&quot;);//s3变量记录的地址为：new String(&quot;11&quot;)<br>
+s3.intern();//在字符串常量池中生成&quot;11&quot;，如何理解：jdk6：创建了一个新的对象&quot;11&quot;，也就有新的地址<br>
+//jdk7/8：此时常量池中并没有创建&quot;11&quot;，而是创建一个指向堆空间中 <code>new String(&quot;11&quot;)</code> 即s3的地址<br>
+String s4 = &quot;11&quot;;//s4变量记录的地址；使用的是上一行代码执行时，在常量池中生成的&quot;11&quot;的地址<br>
+System.out.println(s3 == s4);//jdk6：false；jdk7/8：true</p>
+<h2 id="128-面试的拓展问题">128-面试的拓展问题</h2>
+<p>总结String的intern()的使用：</p>
+<ul>
+<li>jdk1.6中，将这个字符串对象尝试放入串池
+<ul>
+<li>如果串池中有，则并不会放入。返回已有的串池中的对象的地址</li>
+<li>如果没有，会把此对象复制一份，放入串池，并返回串池中的对象地址</li>
+</ul>
+</li>
+<li>jdk1.7起，将这个字符串对象尝试放入串池
+<ul>
+<li>如果串池中有，则并不会放入。返回已有的串池中的对象的地址</li>
+<li>如果没有，则会把对象的引用地址复制一份，放入串池，并返回串池中的引用地址</li>
+</ul>
+</li>
+</ul>
+<h2 id="129-intern的课后练习1">129-intern()的课后练习1</h2>
+<h2 id="130-intern的课后练习2">130-intern()的课后练习2</h2>
+<h2 id="131-intern的空间效率测试">131-intern()的空间效率测试</h2>
+<p>大的网站平台，需要内存中存储大量的字符串。比如社交网站，很多人都存储：北京市、海淀区等信息。这时候如果字符串都调用intern()方法，就会明显降低内存的大小。</p>
+<h2 id="132-stringtable的垃圾回收测试">132-StringTable的垃圾回收测试</h2>
+<h2 id="133-g1垃圾收集器的string去重操作">133-G1垃圾收集器的String去重操作</h2>
+<ul>
+<li>背景：对许多Java应用（有大的也有小的）做的测试得出以下结果：
+<ul>
+<li>堆存活数据集合里面String对象占了25%</li>
+<li>堆存活数据集合里面重复的String对象有13.5%</li>
+<li>String对象的平均长度是45</li>
+</ul>
+</li>
+<li>许多大规模的Java应用的瓶颈在于内存，测试表明，在这些类型的应用里面，Java堆中存活的数据集合差不多25%是String对象。更进一步，这里面差不多一半String对象是重复的，重复的意思是说：String1.equals(String2) = true 。堆上存在重复的String对象必然是一种内存的浪费。这个项目将在G1垃圾收集器中实现自动持续对重复的String对象进行去重，这样就能避免浪费内存。</li>
+<li>实现
+<ul>
+<li>当垃圾收集器工作的时候，会访问堆上存活的对象。对每一个访问的对象都会检查是否是候选的要去重的String对象</li>
+<li>如果是，把这个对象的一个引用插入到队列中等待后续的处理。一个去重的线程在后台运行，处理这个队列。处理队列的一个元素意味着从队列删除这个元素，然后尝试去重它引用的String对象。</li>
+<li>使用一个hashtable来记录所有的被String对象使用的不重要的char数组，当去重的时候，会查这个hashtable，来看堆上是否已经存在一个一摸一样的char数组</li>
+<li>如果存在，String对象会被调整引用那个数组，释放对原来的数组的引用，最终会被垃圾收集器回收掉</li>
+<li>如果查找失败，char数组会被插入到hashtable，这样以后的时候就可以共享这个数组了。</li>
+</ul>
+</li>
+<li>命令行选项
+<ul>
+<li>UseStringDeduplication(bool):开启String去重，默认是不开启的，需要手动开启。</li>
+<li>PrintStringDeduplicationStatistics（bool）：打印详细的去重统计信息</li>
+<li>StringDeduplicationAgeThreshold（uintx）：达到这个年龄的String对象被认为是去重的候选对象</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://banlanmao.github.io/tag/F8-HJX5Nr/" class="tag">
+                    JVM
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://banlanmao.github.io/post/di-12-zhang-zhi-xing-yin-qing/">
+                  <h3 class="post-title">
+                    第12章 执行引擎
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

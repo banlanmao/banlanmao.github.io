@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://banlanmao.github.io</id>
     <title>banlanmao</title>
-    <updated>2021-06-04T02:25:19.098Z</updated>
+    <updated>2021-10-19T06:36:52.666Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://banlanmao.github.io"/>
     <link rel="self" href="https://banlanmao.github.io/atom.xml"/>
@@ -11,73 +11,73 @@
     <icon>https://banlanmao.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, banlanmao</rights>
     <entry>
+        <title type="html"><![CDATA[第18章 Class文件结构]]></title>
+        <id>https://banlanmao.github.io/post/di-18-zhang-class-wen-jian-jie-gou/</id>
+        <link href="https://banlanmao.github.io/post/di-18-zhang-class-wen-jian-jie-gou/">
+        </link>
+        <updated>2021-07-09T07:30:36.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[第17章 垃圾回收器]]></title>
+        <id>https://banlanmao.github.io/post/di-17-zhang-la-ji-hui-shou-qi/</id>
+        <link href="https://banlanmao.github.io/post/di-17-zhang-la-ji-hui-shou-qi/">
+        </link>
+        <updated>2021-06-25T07:36:25.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[第16章 垃圾回收相关概念]]></title>
+        <id>https://banlanmao.github.io/post/di-16-zhang-la-ji-hui-shou-xiang-guan-gai-nian/</id>
+        <link href="https://banlanmao.github.io/post/di-16-zhang-la-ji-hui-shou-xiang-guan-gai-nian/">
+        </link>
+        <updated>2021-06-23T00:59:47.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[第15章 垃圾回收相关算法]]></title>
+        <id>https://banlanmao.github.io/post/di-15-zhang-la-ji-hui-shou-xiang-guan-suan-fa/</id>
+        <link href="https://banlanmao.github.io/post/di-15-zhang-la-ji-hui-shou-xiang-guan-suan-fa/">
+        </link>
+        <updated>2021-06-11T03:46:05.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[第14章 垃圾回收概述]]></title>
+        <id>https://banlanmao.github.io/post/di-14-zhang-la-ji-hui-shou-gai-shu/</id>
+        <link href="https://banlanmao.github.io/post/di-14-zhang-la-ji-hui-shou-gai-shu/">
+        </link>
+        <updated>2021-06-10T03:45:34.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[第13章 StringTable]]></title>
+        <id>https://banlanmao.github.io/post/di-13-zhang-stringtable/</id>
+        <link href="https://banlanmao.github.io/post/di-13-zhang-stringtable/">
+        </link>
+        <updated>2021-06-08T07:36:48.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[第12章 执行引擎]]></title>
+        <id>https://banlanmao.github.io/post/di-12-zhang-zhi-xing-yin-qing/</id>
+        <link href="https://banlanmao.github.io/post/di-12-zhang-zhi-xing-yin-qing/">
+        </link>
+        <updated>2021-06-07T02:20:56.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[第11章 直接内存]]></title>
+        <id>https://banlanmao.github.io/post/di-11-zhang-zhi-jie-nei-cun/</id>
+        <link href="https://banlanmao.github.io/post/di-11-zhang-zhi-jie-nei-cun/">
+        </link>
+        <updated>2021-06-05T08:29:33.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[第10章 对象的实例化内存布局与访问定位]]></title>
+        <id>https://banlanmao.github.io/post/di-10-zhang-dui-xiang-de-shi-li-hua-nei-cun-bu-ju-yu-fang-wen-ding-wei/</id>
+        <link href="https://banlanmao.github.io/post/di-10-zhang-dui-xiang-de-shi-li-hua-nei-cun-bu-ju-yu-fang-wen-ding-wei/">
+        </link>
+        <updated>2021-06-04T03:17:09.000Z</updated>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[第9章 方法区]]></title>
         <id>https://banlanmao.github.io/post/di-9-zhang-fang-fa-qu/</id>
         <link href="https://banlanmao.github.io/post/di-9-zhang-fang-fa-qu/">
         </link>
         <updated>2021-06-02T07:07:49.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[第8章 堆]]></title>
-        <id>https://banlanmao.github.io/post/di-8-zhang-dui/</id>
-        <link href="https://banlanmao.github.io/post/di-8-zhang-dui/">
-        </link>
-        <updated>2021-05-27T02:31:07.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[第7章 本地方法栈]]></title>
-        <id>https://banlanmao.github.io/post/di-7-zhang-ben-di-fang-fa-zhan/</id>
-        <link href="https://banlanmao.github.io/post/di-7-zhang-ben-di-fang-fa-zhan/">
-        </link>
-        <updated>2021-05-27T01:18:41.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[第6章 本地方法接口]]></title>
-        <id>https://banlanmao.github.io/post/di-6-zhang-ben-di-fang-fa-jie-kou/</id>
-        <link href="https://banlanmao.github.io/post/di-6-zhang-ben-di-fang-fa-jie-kou/">
-        </link>
-        <updated>2021-05-27T00:15:03.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[GitBlit安装与使用]]></title>
-        <id>https://banlanmao.github.io/post/gitblit-an-zhuang-yu-shi-yong/</id>
-        <link href="https://banlanmao.github.io/post/gitblit-an-zhuang-yu-shi-yong/">
-        </link>
-        <updated>2021-05-14T01:06:39.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[第5章 虚拟机栈]]></title>
-        <id>https://banlanmao.github.io/post/di-5-zhang-xu-ni-ji-zhan/</id>
-        <link href="https://banlanmao.github.io/post/di-5-zhang-xu-ni-ji-zhan/">
-        </link>
-        <updated>2021-05-11T00:51:16.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[第4章 程序计数器]]></title>
-        <id>https://banlanmao.github.io/post/di-4-zhang-cheng-xu-ji-shu-qi/</id>
-        <link href="https://banlanmao.github.io/post/di-4-zhang-cheng-xu-ji-shu-qi/">
-        </link>
-        <updated>2021-05-10T08:28:11.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[第3章 运行时数据区概述及线程]]></title>
-        <id>https://banlanmao.github.io/post/di-3-zhang-yun-xing-shi-shu-ju-qu-gai-shu-ji-xian-cheng/</id>
-        <link href="https://banlanmao.github.io/post/di-3-zhang-yun-xing-shi-shu-ju-qu-gai-shu-ji-xian-cheng/">
-        </link>
-        <updated>2021-05-10T06:21:36.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[第2章 类加载子系统]]></title>
-        <id>https://banlanmao.github.io/post/di-er-zhang-lei-jia-zai-zi-xi-tong/</id>
-        <link href="https://banlanmao.github.io/post/di-er-zhang-lei-jia-zai-zi-xi-tong/">
-        </link>
-        <updated>2021-05-06T01:49:33.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[第1章 JVM与Java体系结构]]></title>
-        <id>https://banlanmao.github.io/post/di-1-zhang-jvm-yu-java-ti-xi-jie-gou/</id>
-        <link href="https://banlanmao.github.io/post/di-1-zhang-jvm-yu-java-ti-xi-jie-gou/">
-        </link>
-        <updated>2021-05-04T07:29:53.000Z</updated>
     </entry>
 </feed>
